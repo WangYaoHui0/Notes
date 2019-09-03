@@ -1,0 +1,50 @@
+1.C/C++内存分布
+	（1）内核空间：用户代码无法读写；
+	（2）栈：又叫堆栈，存放非静态局部变量/函数参数/返回值等，栈是向下增长的；
+	（3）内存映射段：是高效的I/O映射方式，用于装载一个共享的动态内存库。用户可以使用系统接口创建共享
+			内存，做进程间通信；
+	（4）堆：用于程序运行时动态内存分配，堆是向上增长的；
+	（5）数据段：存储全局数据和静态数据；
+	（6）代码段：存放可执行代码/只读常量。
+
+2.C语言中动态内存管理方式
+	（1）malloc/calloc/realloc 和 free；
+	（2）malloc/calloc/realloc 三者的区别？
+		-
+
+3.C++内存管理方式
+	（1）new/delete操作内置类型：申请和释放单个元素的空间，使用new和delete操作符，
+					申请和释放连续的空间，使用new[]和delete[]操作符；
+	（2）new/delete操作自定义类型：在申请自定义类型的空间时，new会调用构造函数，delete会调用析构函数，
+					而malloc/free不会调用。
+
+4.operator new 与 operator delete 函数
+	（1）new/delete是用户进行动态内存申请和释放的操作符，operator new/operator delete是系统提供的全局
+		函数，new在底层调用operator new全局函数来申请空间，delete在底层通过operator delete全局函数
+		来释放空间；
+	（2）operator new实际也是通过malloc来申请空间，如果malloc申请空间成功就直接返回，否则执行用户提供的
+		空间不足应对措施，如果用户提供该措施就继续申请，否则就抛异常；operator delete最终是通过free
+		来释放空间的。
+
+5.new/delete 的实现原理
+	（1）内置类型：
+		- new和malloc，delete和free基本类似，
+		- new/delete 申请/释放单个元素的空间，new[]/delete[] 申请/释放连续的空间，
+		- new 在申请空间失败时会抛异常，而 malloc 则是返回NULL；
+	（2）自定义类型：
+		- new/new[] 的原理：调用operator new/operator new[] 函数申请空间，
+				在申请的空间上执行构造函数，完成对象的构造，
+		- delete/delete[] 的原理：在空间上执行析构函数，完成对象中资源的清理工作，
+					调用operator delete/operator delete[] 函数释放对象的空间。
+
+6.定位new表达式（placement-new）
+	（1）概念：定位new表达式是在已分配的原始内存空间中调用构造函数初始化一个对象；
+	（2）使用格式：
+		- new(place_address) type 或者 new(place_address) type(initializer-list)
+		- place_address 必须是一个指针，initializer-list是类型的初始化列表；
+	（3）使用场景：
+		- 定位new表达式在实际中一般是配合内存池使用，
+		- 因为内存池分配出的内存没有初始化，所以如果是自定义类型的对象，需要使用new的定义表达式
+			进行显示调构造函数进行初始化。
+
+

@@ -1,0 +1,32 @@
+1.stack的概念及常用接口
+	（1）概念：
+		- stack是一种容器适配器，专门用在具有后进先出操作的上下文环境中，其只能从容器的一端进行
+			元素的插入与提取操作；
+
+		- stack是作为容器适配器被实现的，容器适配器即是：对特定容器类进行封装，将其作为底层的容器，
+			并提供一组特定的成员函数来访问其元素。元素在特定容器的尾部(即栈顶)被压入和弹出；
+
+		- stack的底层容器可以是任何标准的容器类模板或者一些其他特定的容器类，这些容器类应该支持以下
+			操作：
+			- empty：判空操作
+			- back：获取尾部元素操作
+			- push_back：尾部插入元素操作
+			- pop_back：尾部删除元素操作
+
+		- 标准容器vector、deque、list均符合这些需求，默认情况下，如果没有为stack指定特定的底层容器，
+			默认情况下使用deque。
+
+	（2）stack的常用接口：
+		- stack(const container_type& ctnr = container_type())		- 构造空的栈
+		- bool empty()const						- 检测stack是否为空
+		- size_type size()const						- 返回stack中元素的个数
+		- value_type& top()						- 返回栈顶元素的引用
+		- const value_type& top()const					- 返回栈顶元素的const引用
+		- void push(const value_type& val)				- 将元素val压入stack中
+		- void pop()							- 将stack中尾部的元素弹出
+		- template<class... Args>
+		  void emplace(Args&&... args)(C++11)				- 在stack的栈顶构造元素
+		- void swap(stack& x)(C++11)					- 交换两个栈中的元素
+
+
+

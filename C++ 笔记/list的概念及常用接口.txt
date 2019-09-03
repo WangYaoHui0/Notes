@@ -1,0 +1,94 @@
+1.list的概念和常用接口
+	（1）概念：
+		-  list是可以在常数范围内在任意位置进行插入和删除的序列式容器，并且该容器可以前后双向迭代；
+
+		-  list的底层是双向链表结构，双向链表中每个元素存储在互不相关的独立节点中，在节点中通过指
+			针指向其前一个元素和后一个元素；
+
+		-  list与forward_list非常相似：最主要的不同在于forward_list是单链表，只能朝前迭代，以让其
+			更简单高效；
+
+		- 与其他的序列式容器相比(array，vector，deque)，list通常在任意位置进行插入、移除元素的执行
+			效率更好；
+
+		- 与其他序列式容器相比，list和forward_list最大的缺陷是不支持任意位置的随机访问，比如：要访
+			问list的第6个元素，必须从已知的位置(比如头部或者尾部)迭代到该位置，在这段位置上迭代
+			需要线性的时间开销；list还需要一些额外的空间，以保存每个节点的相关联信息(对于存储
+			类型较小元素的大list来说这可能是一个重要的因素)
+
+	（2）常用接口：
+		- list的构造：
+			- list()							- 构造空的list
+			- list(size_type n, const value_type& val = value_type())	- 构造的list中包含n个值为val的元素
+			- list(const list& x)						- 拷贝构造函数
+			- list(InputIterator first, InputIterator last)			- 用[first, last)区间
+												中的元素构造list
+
+		- list iterator的使用：
+			- begin()		- 返回第一个元素的迭代器
+			- end()			- 返回最后一个元素下一个位置的迭代器
+			- rbegin()		- 返回第一个元素的reverse_iterator,即end位置
+			- rend()		- 返回最后一个元素下一个位置的reverse_iterator,即begin位置
+			- cbegin()		- (C++11) 返回第一个元素的cosnt_iterator
+			- cend()		- (C++11) 返回最后一个元素下一个位置的const_iterator
+			- crbegin()		- (C++11) 即cend()位置
+			- crend()		- (C++11) 即cbegin()位置
+
+			- 注：
+				- begin与end为正向迭代器，对迭代器执行++操作，迭代器向后移动；
+				- rbegin(end)与rend(begin)为反向迭代器，对迭代器执行++操作，迭代器向前移动；
+				- cbegin与cend为const的正向迭代器，与begin和end不同的是：该迭代器指向节点中
+					的元素值不能修改；
+				- crbegin与crend为const的反向迭代器，与rbegin和rend不同的是：该迭代器指向节
+					点中的元素值不能修改。
+
+		- list capacity：
+			- bool empty()const		- 检测list是否为空，是返回true，否则返回false
+			- size_t size()const		- 返回list中有效节点的个数
+
+		- list element access：
+			- reference front()			- 返回list的第一个节点中值的引用
+			- const_reference front()const		- 返回list的第一个节点中值的const引用
+			- reference back()			- 返回list的最后一个节点中值的引用
+			- const_reference back()const		- 返回list的最后一个节点中值的const引用
+
+		- list modifiers：
+			- void push_front(const value_type& val)	- 在list首元素前插入值为val的元素
+			- void pop_front()				- 删除list中第一个元素
+			- void push_back(const value_type& val)		- 在list尾部插入值为val的元素
+			- void pop_back()				- 删除list中最后一个元素
+
+			- template<class... Args>
+			  void emplace_front(Args&&... args)（C++11）	- 在list第一个元素前根据参数直接构造元素
+
+			- template<class... Args> 
+			  void emplace_back(Args&&... args)（C++11）	- 在list最后一个元素后根据参数直接构造元素
+
+			- template<class... Args> 
+			  iterator emplace(const_iterator position,	- 在链表的任意位置根据参数直接构造元素
+				Args&&... args)（C++11）
+
+			- iterator insert(iterator position,		- 在list position位置中插入值为val的元素
+				const value_type& val)
+			- void insert(iterator position,		- 在list position位置插入n个值为val的元素
+				size_type n, const value_type& val)
+			- void insert(iterator position,		- 在list position位置插入[first, last)区间中元素
+				InputIterator first, InputIterator last)
+
+			- iterator erase(iterator position)		- 删除list position位置的元素
+			- iterator erase(iterator first, iterator last)	- 删除list中[first, last)区间中的元素
+
+			- void swap(list& x)				- 交换两个list中的元素
+
+			- void resize(size_type n,			- 将list中有效元素个数改变到n个，多出的
+				value_type val = value_type())			元素用val填充
+
+			- void clear()					- 清空list中的有效元素
+
+		- list的迭代器失效：
+			- 迭代器失效就是迭代器所指向的节点无效，即该节点被删除了；
+			- 因为list的底层结构为带头结点的双向循环链表，因此在list中进行插入时是不会
+				导致list的迭代器失效的，只有在删除时才会失效，并且失效的只是指向被
+				删除节点的迭代器，其他迭代器不会受到影响。
+
+

@@ -1,0 +1,89 @@
+1.queue的概念及常用接口
+	（1）概念：
+		- 队列是一种容器适配器，专门用于在FIFO上下文(先进先出)中操作，其中从容器一端插入元素，另一端
+			提取元素；
+
+		- 队列是作为容器适配器被实现的，容器适配器即：将特定容器类封装作为其底层容器类，queue提供一组
+			特定的成员函数来访问其元素。元素从队尾入队列，从队头出队列；
+
+		- 底层容器可以是标准容器类模板之一，也可以是其他专门设计的容器类。其底层容器应至少支持以下操
+			作:
+			- empty：检测队列是否为空
+			- size：返回队列中有效元素的个数
+			- front：返回队头元素的引用
+			- back：返回队尾元素的引用
+			- push_back：在队列尾部入队列
+			- pop_front：在队列头部出队列
+
+		- 标准容器类deque和list满足了这些要求。默认情况下，如果没有为queue实例化指定容器类，则使用标
+			准容器deque。
+
+	（2）queue的常用接口：
+		- queue(const container_type& ctnr = container_type())		- 构造空的队列
+		- bool empty()const						- 检测队列是否为空，是返回true，
+											否则返回false
+		- size_type size()const						- 返回队列中有效元素的个数
+		- value_type& front()						- 返回队头元素的引用
+		- const value_type& front()const				- 返回队头元素的const引用
+		- value_type& back()						- 返回队尾元素的引用
+		- const value_type& back()const					- 返回队尾元素的cosnt引用
+		- void push(value_type& val)					- 在队尾将元素val入队列
+		- void pop()							- 将队头元素出队列
+		- template<class... Args>
+		  void emplace(Args&&... args) (C++11)				- 在队尾构造元素
+		- void swap(queue& x)						- 交换两个队列中的元素
+
+2.priority_queue的概念及常用接口
+	（1）概念：
+		- 优先队列是一种容器适配器，根据严格的弱排序标准，它的第一个元素总是它所包含的元素中最大的；
+
+		- 此上下文类似于堆，在堆中可以随时插入元素，并且只能检索最大堆元素(优先队列中位于顶部的元素)；
+
+		- 优先队列被实现为容器适配器，容器适配器即将特定容器类封装作为其底层容器类，queue提供一组特
+			定的成员函数来访问其元素。元素从特定容器的“尾部”弹出，其称为优先队列的顶部；
+
+		- 底层容器可以是任何标准容器类模板，也可以是其他特定设计的容器类。容器可以支持通过随机访问迭
+			代器访问，并支持以下操作：
+			- empty()：检测容器是否为空
+			- size()：返回容器中有效元素个数
+			- front()：返回容器中第一个元素的引用
+			- push_back()：在容器尾部插入元素
+			- pop_back()：删除容器尾部元素
+
+		- 标准容器类vector和deque满足这些需求。默认情况下，如果没有为特定的priority_queue类实例化指
+			定容器类，则使用vector；
+
+		- 需要支持随机访问迭代器，以便始终在内部保持堆结构。容器适配器通过在需要时自动调用算法函数
+			make_heap、push_heap和pop_heap来自动完成此操作。
+
+	（2）priority_queue的常用接口：
+		- 优先级队列默认使用vector作为其底层存储数据的容器，在vector上又使用了堆算法将vector中元素构造成
+			堆的结构，因此priority_queue就是堆，所有需要用到堆的位置，都可以考虑使用priority_queue。
+			注意：默认情况下priority_queue是大堆。
+
+		- priority_queue(const Compare& x = Compare(),
+			const Container& y = Container());			- 构造一个空的优先级队列
+
+		- template
+		  priority_queue(InputIterator first, InputIterator last,	- 用[first, last)区间中的元素
+			const Compare& comp = Compare(),				构造优先级队列
+			const Container& ctnr = Container());
+
+		- bool empty( )const						- 检测优先级队列是否为空，是
+											返回true，否则返回false
+
+		- const value_type& top()const					- 返回优先级队列中最大(最小元素)，
+											即堆顶元素
+
+		- void push(const T& x)						- 在优先级队列中插入元素x
+
+		- void pop()							- 删除优先级队列中最大(最小)元素，
+											即堆顶元素
+
+		- 注：
+			- 默认情况下，priority_queue是大堆，
+			- 如果在priority_queue中放自定义类型的数据，用户需要在自定义类型中提供 > 或者 < 的重载，
+			- 在特殊情况下，用户可能需要提供比较器规则
+
+
+

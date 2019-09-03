@@ -1,0 +1,63 @@
+1.vector的概念及常用接口
+	（1）vector的概念：
+		-  vector是表示可变大小数组的序列容器；
+
+		-  就像数组一样，vector也采用的连续存储空间来存储元素。也就是意味着可以采用下标
+			对vector的元素进行访问，和数组一样高效。但是又不像数组，它的大小是可以动
+			态改变的，而且它的大小会被容器自动处理；
+
+		- 本质上讲，vector是使用动态分配数组来存储它的元素。当新元素插入时候，这个数组需
+			要被重新分配大小来增加存储空间。其做法是，分配一个新的数组，然后将全部元素
+			移到这个数组。就时间而言，这是一个相对代价高的任务，因此每当一个新的元素
+			加入到容器的时候，vector并不会每次都重新分配大小；
+
+		- vector分配空间的策略：vector会分配一些额外的空间以适应可能的增长，因此存储空间比
+			实际需要的存储空间更大。不同的库采用不同的策略权衡空间的使用和重新分配。但是
+			无论如何，重新分配都应该是对数增长的间隔大小，以至于在末尾插入一个元素的时候
+			是在常数时间的复杂度完成的。
+
+	（2）vector的常用接口：
+		- vector的定义：
+			- vector()							- 无参构造
+			- vector(size_type n, const value_type& val = value_type())	- 构造并初始化n个val
+			- vector(const vector& x);					- 拷贝构造
+			- vector(InputIterator first, InputIterator last);		- 使用迭代器进行初始化构造
+
+		- vector iterator的使用：
+			- begin()		- 获取第一个数据位置的iterator
+			- end()			- 获取最后一个数据的下一个位置的iterator
+			- rbegin()		- 获取最后一个数据位置的reverse_iterator
+			- rend()		- 获取第一个数据前一个位置的reverse_iterator
+			- cbegin()		- 获取第一个数据位置的const_iterator
+			- cend()		- 获取最后一个数据的下一个位置的const_iterator
+
+		- vector空间增长问题:
+			- size()							- 获取数据个数
+			- capacity()							- 获取容量大小
+			- empty()							- 判断是否为空
+			- void resize(size_type n, value_type val = value_type());	- 改变vector的size
+			- void reserve(size_type n);					- 改变vector的capacity
+
+			- 注：
+				- capacity的代码在vs和g++下分别运行会发现，vs下capacity是按1.5倍增长的，
+					g++是按2倍增长的。vs是PJ版本STL，g++是SGI版本STL。
+				- reserve只负责开辟空间，如果可以确定知道用多少空间，reserve可以缓解
+					vector增容的代价缺陷问题。
+				- resize在开辟空间的同时还会进行初始化，影响size。
+
+		- vector增删查改：
+			- void push_back(const value_type& val);		- 尾插
+			- void pop_back();					- 尾删
+			- InputIterator find(InputIterator first,		- 查找（注意这个是算法模块
+				InputIterator last, const T& val);			实现，不是vector的成员接口）
+			- iterator insert(iterator position, const		- 在position之前插入val
+				value_type& val);
+			- iterator erase(iterator position);			- 删除position位置的数据
+			- void swap(vector& x);					- 交换两个vector的数据空间
+			- reference operator[](size_type n);			- 像数组一样访问
+
+		- vector迭代器失效问题
+
+		- vector在OJ中的使用
+
+
